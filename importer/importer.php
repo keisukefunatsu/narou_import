@@ -67,7 +67,7 @@ class NarouImporter
             $category_ids = $this->setup_category($arr);
             $post = [
                 'post_content' => $this->setup_content($arr),
-                'post_name' => $arr[':isbn'], // slug
+                'post_name' => 'novel-' . $arr[':isbn'], // slug
                 'post_title' => $arr[':title'], // title
                 // 'post_status' => 'draft',
                 'post_status' => 'publish',
@@ -103,8 +103,8 @@ class NarouImporter
         //$_FILESを偽装したデータを作る
         $f = [];
         //適当に名前を決める（乱数でも、日時でも、URLからでも）
-        //$f['name'] =  microtime(true) . '.jpg';
-        $f['name'] = basename($target_url);
+        $f['name'] =  microtime(true) . '.jpg';
+        // $f['name'] = basename($target_url);
         //一時的に保存する
         $f['tmp_name'] = download_url($target_url);
         //メディアに登録してIDを取得
