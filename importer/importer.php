@@ -154,13 +154,17 @@ class NarouImporter
         $html .= '作者：' . $arr[':author'];
         $html .= '</p>';
 
-        $html .= '<p>';
-        $html .= '<a href="' . $arr[':author_url'] . '">作者ページ</a>';
-        $html .= '</p>';
+        if (!empty($arr[':author_url'])) {
+            $html .= '<p>';
+            $html .= '<a href="' . $arr[':author_url'] . '">作者ページ</a>';
+            $html .= '</p>';
+        }
 
-        $html .= '<p>';
-        $html .= '長さ：' . $arr[':length'];
-        $html .= '</p>';
+        if (!empty($arr[':length'])) {
+            $html .= '<p>';
+            $html .= '長さ：' . $arr[':length'];
+            $html .= '</p>';
+        }
         if (!empty($arr[':global_point'])) {
             $html .= '<p>';
             $html .= '総合得点：' . $arr[':global_point'];
