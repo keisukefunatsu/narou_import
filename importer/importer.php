@@ -65,9 +65,16 @@ class NarouImporter
                 $author_message = implode($author_message);
             }
             $category_ids = $this->setup_category($arr);
+            $post_name = 'novel-' . $arr[':isbn'];
+
+            // ISBNがなければタイトルをスラッグにする
+            if ($arr[':isbn'] == '0') {
+                $post_name = $arr[':title'];
+            }
+            
             $post = [
                 'post_content' => $this->setup_content($arr),
-                'post_name' => 'novel-' . $arr[':isbn'], // slug
+                'post_name' => $post_name, // slug
                 'post_title' => $arr[':title'], // title
                 // 'post_status' => 'draft',
                 'post_status' => 'publish',
