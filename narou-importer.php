@@ -28,3 +28,20 @@ function pp($str)
     echo '</pre>';
     echo '</div>';
 }
+
+
+add_action('init', 'create_post_type');
+function create_post_type()
+{
+    register_post_type(
+        'blog',
+        array(
+            'labels' => array(
+                'name' => __('blog'),
+                'singular_name' => __('blog')
+            ),
+            'public' => true,
+            'has_archive' => true,
+        )
+    );
+}
