@@ -66,7 +66,12 @@ class NarouImporter
             }
             $category_ids = $this->setup_category($arr);
             $post_name = 'n-' . $arr[':isbn'];
-
+            // 記事の重複チェック
+            $existing_post_id = get_posts("name=$post_name");
+            if ($existing_post_id) {
+                $existing_post_id = $existing_post_id[0]->ID;
+            }
+            
             // ISBNがなければタイトルをスラッグにする
             if ($arr[':isbn'] == '0') {
                 $post_name = $arr[':title'];
@@ -95,12 +100,18 @@ class NarouImporter
             ];
             // pp($post);
             // pp($arr);
-            // カテゴリーを定義
-            $post_id = wp_insert_post($post);
-            // 画像があるものは画像を登録する
-            if (!empty($arr[':image_src'])) {
-                $thumbnail_id = $this->setup_media($arr[':image_src'], $post_id);
-                set_post_thumbnail($post_id, $thumbnail_id);
+            // 投稿が存在していたら更新する
+            if ($existing_post_id) {
+                $post['ID'] = $existing_post_id;
+                wp_update_post($post);
+            } else {
+                // 投稿がなければ作成
+                $post_id = wp_insert_post($post);
+                // 画像があるものは画像を登録する
+                if (!empty($arr[':image_src'])) {
+                    $thumbnail_id = $this->setup_media($arr[':image_src'], $post_id);
+                    set_post_thumbnail($post_id, $thumbnail_id);
+                }
             }
         }
     }
@@ -132,7 +143,7 @@ class NarouImporter
         }
 
         $html = '';
-        $html .= '<img src="' . $arr[':image_src'] . '">';
+        // $html .= '<img src="' . $arr[':image_src'] . '">';
         if (!empty($content)) {
             $html .= '<h2>本の説明</h2>';
             $html .= $content;

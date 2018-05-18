@@ -45,3 +45,28 @@ function create_post_type()
         )
     );
 }
+
+
+// スラッグで分岐させる
+function is_parent_slug()
+{
+    global $post;
+    if (!empty($post)) {
+        if ($post->post_parent) {
+            $post_data = get_post($post->post_parent);
+            return $post_data->post_name;
+        }
+    }
+}
+
+// カスタム投稿のブログの時は独自テンプレートを適用
+function get_narou_template($template = '')
+{
+    if (is_post_type_archive('blog')) {
+        $template = NAROU_DIR . '/templates/archive-blog.php';
+    }
+
+    return $template;
+}
+
+add_filter('template_include', 'get_narou_template', 1);
