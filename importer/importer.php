@@ -67,10 +67,10 @@ class NarouImporter
             $category_ids = $this->setup_category($arr);
             $post_name = 'n-' . $arr[':isbn'];
 
-            // ISBNがなければ スキップ
+            // ISBNがなければmd5のハッシュ値をスラッグにする
             if ($arr[':isbn'] == '0') {
-                // $post_name = $arr[':title'];
-                continue;
+                $post_name = md5($arr[':title']);
+                // pp($post_name);
             }
             // 記事の重複チェック
             $existing_post_id = get_posts("name=$post_name");
@@ -109,10 +109,10 @@ class NarouImporter
                 // 投稿がなければ作成
                 $post_id = wp_insert_post($post);
                 // 画像があるものは画像を登録する
-                if (!empty($arr[':image_src'])) {
-                    $thumbnail_id = $this->setup_media($arr[':image_src'], $post_id);
-                    set_post_thumbnail($post_id, $thumbnail_id);
-                }
+                // if (!empty($arr[':image_src'])) {
+                //     $thumbnail_id = $this->setup_media($arr[':image_src'], $post_id);
+                //     set_post_thumbnail($post_id, $thumbnail_id);
+                // }
             }
         }
     }
