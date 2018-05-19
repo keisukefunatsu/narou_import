@@ -109,10 +109,10 @@ class NarouImporter
                 // 投稿がなければ作成
                 $post_id = wp_insert_post($post);
                 // 画像があるものは画像を登録する
-                // if (!empty($arr[':image_src'])) {
-                //     $thumbnail_id = $this->setup_media($arr[':image_src'], $post_id);
-                //     set_post_thumbnail($post_id, $thumbnail_id);
-                // }
+                if (!empty($arr[':image_src'])) {
+                    $thumbnail_id = $this->setup_media($arr[':image_src'], $post_id);
+                    set_post_thumbnail($post_id, $thumbnail_id);
+                }
             }
         }
     }
