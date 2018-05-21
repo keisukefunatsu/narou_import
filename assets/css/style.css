@@ -1,0 +1,29 @@
+.square_btn {
+    display: inline-block;
+    padding: 0.3em 0.5em;
+    text-decoration: none;
+    color: #67c5ff;
+    border: solid 2px #67c5ff;
+    border-radius: 3px;
+    transition: .4s;
+    margin: 4px;
+}
+.square_btn.green {
+    display: inline-block;
+    padding: 0.3em 0.5em;
+    text-decoration: none;
+    color: #80eeaa;
+    border: solid 2px #80eeaa;
+    border-radius: 3px;
+    transition: .4s;
+    margin: 4px;
+}
+
+.square_btn:hover {
+    background: #67c5ff;
+    color: white;
+}
+.square_btn.green:hover {
+    background:  #80eeaa;
+    color: white;
+}

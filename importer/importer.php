@@ -79,7 +79,7 @@ class NarouImporter
             }
             
             $post = [
-                'post_content' => $this->setup_content($arr),
+                'post_content' => $this->setup_content($arr, $existing_post_id),
                 'post_name' => $post_name, // slug
                 'post_title' => $arr[':title'], // title
                 // 'post_status' => 'draft',
@@ -132,67 +132,43 @@ class NarouImporter
         // $url = wp_get_attachment_url($id);
         return $id;
     }
-    public function setup_content($arr)
+    public function setup_content($arr, $post_id)
     {
-        $content = $arr[':book_content'];
-        $story = $arr[':story'];
-        if (is_array($content)) {
-            $content = implode($content);
-        }
-        if (is_array($story)) {
-            $story = implode($story);
-        }
 
         $html = '';
-        // $html .= '<img src="' . $arr[':image_src'] . '">';
-        if (!empty($content)) {
-            $html .= '<h2>本の説明</h2>';
-            $html .= $content;
-            $html .= '<p>';
-            $html .= '<code>';
-            $html .= '引用元：https://syosetu.com' . $arr[':href'];
-            $html .= '</code>';
-            $html .= '</p>';
+        $html .= '<h2>小説情報</h2>';
+        $html .= '<div>';
+        if($post_id) {
+            $posttags = get_the_tags($post_id);
+            if ( $posttags ) {
+                foreach ( $posttags as $tag ) {
+                    $html .= '<a class="square_btn" href="' .home_url('/tag/') . $tag->slug . '">' . $tag->name . '</a>'; 
+                }
+            }
         }
-        
-        if (!empty($story)) {
-            $html .= '<h2>作品のあらすじ</h2>';
-            $html .= $story;
-            $html .= '<p>';
-            $html .= '<code>';
-            $html .= '引用元：' . $arr[':author_url'];
-            $html .= '</code>';
-            $html .= '</p>';
-        }
-
+        $html .= '</div>';
         $html .= '<blockquote>';
         $html .= '<p>';
         $html .= '更新日時' . date('Y年m月d日');
         $html .= '</p>';
         $html .= '<p>';
-        $html .= '作者：' . $arr[':author'];
+        $html .= '著者：' . $arr[':author'];
         $html .= '</p>';
 
         if (!empty($arr[':author_url'])) {
             $html .= '<p>';
-            $html .= '<a href="' . $arr[':author_url'] . '">作者ページ</a>';
+            $html .= '<a class="" href="' . $arr[':author_url'] . '">作者ページ</a>';
             $html .= '</p>';
         }
 
         if (!empty($arr[':length'])) {
             $html .= '<p>';
-            $html .= '長さ：' . $arr[':length'];
+            $html .= '長さ：' . $arr[':length'] . '文字';
             $html .= '</p>';
         }
         if (!empty($arr[':global_point'])) {
             $html .= '<p>';
-            $html .= '総合得点：' . $arr[':global_point'];
-            $html .= '</p>';
-        }
-
-        if (!empty($arr[':global_point'])) {
-            $html .= '<p>';
-            $html .= '総合得点：' . $arr[':global_point'];
+            $html .= '総合得点：' . $arr[':global_point'] . 'ポイント';
             $html .= '</p>';
         }
         if (!empty($arr[':fav_novel_cnt'])) {
@@ -201,6 +177,57 @@ class NarouImporter
             $html .= '</p>';
         }
         $html .= '</blockquote>';
+        
+        // ここから本の内容
+        $content = $arr[':book_content'];
+        $story = $arr[':story'];
+        $author_message = $arr[':author_message'];
+        if (is_array($content)) {
+            $content = implode($content);
+        }
+        if (is_array($story)) {
+            $story = implode($story);
+        }
+        if (is_array($author_message)) {
+            $author_message = implode($author_message);
+        }
+
+        // $html .= '<img src="' . $arr[':image_src'] . '">';
+        if (!empty($content)) {
+            $html .= '<h2>本の説明</h2>';
+            $html .= '<p>';
+            $html .= $content;
+            $html .= '<div>';
+            $html .= '<code>';
+            $html .= '公式サイトより';
+            $html .= '</code>';
+            $html .= '</div>';
+            $html .= '</p>';
+        }
+        
+        if (!empty($story)) {
+            $html .= '<h2>作品のあらすじ</h2>';            
+            $html .= '<p>';
+            $html .= $story;
+            $html .= '<div>';
+            $html .= '<code>';
+            $html .= '小説家になろう書報ページより';
+            $html .= '</code>';
+            $html .= '</div>';
+            $html .= '</p>';
+        }
+
+        if (!empty($author_message)) {
+            $html .= '<h2>筆者コメント</h2>';            
+            $html .= '<p>';
+            $html .= $author_message;
+            $html .= '<div>';
+            $html .= '<code>';
+            $html .= '筆者まえがきより';
+            $html .= '</code>';
+            $html .= '</div>';
+            $html .= '</p>';
+        }
 
         $html = str_replace('\r\n', '', $html);
 

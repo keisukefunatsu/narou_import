@@ -70,3 +70,8 @@ function get_narou_template($template = '')
 }
 
 add_filter('template_include', 'get_narou_template', 1);
+
+function narou_enqueue_styles() {
+	wp_enqueue_style( 'narou_style', NAROU_PATH . '/assets/css/style.css', false, filemtime( NAROU_DIR . '/assets/css/style.css' ) );
+}
+add_action( 'wp_enqueue_scripts', 'narou_enqueue_styles' );
