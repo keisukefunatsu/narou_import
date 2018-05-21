@@ -194,7 +194,7 @@ class NarouImporter
 
         // $html .= '<img src="' . $arr[':image_src'] . '">';
         if (!empty($content)) {
-            $html .= '<h2>本の説明</h2>';
+            $html .= '<h2>本の紹介</h2>';
             $html .= '<p>';
             $html .= $content;
             $html .= '<div>';
