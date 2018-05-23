@@ -88,8 +88,12 @@ add_action( 'wp_enqueue_scripts', 'narou_enqueue_styles' );
  */
 function narou_orderby_modified( $query ) {
 	if( $query->is_main_query() ) {
-        if( $query->is_home() ) {
-			$query->set( 'post_type', 'blog' );
+        if ($query->is_home()) {
+            $query->set('post_type', 'blog');
+        }
+        // カテゴリ一覧はランダムで表示
+		if( $query->is_category() || $query->is_tag() ) {
+			$query->set( 'orderby', 'rand' );
 		}
 	}
 }
