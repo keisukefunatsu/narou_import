@@ -65,6 +65,9 @@ function get_narou_template($template = '')
     if (is_post_type_archive('blog')) {
         $template = NAROU_DIR . '/templates/archive-blog.php';
     }
+    if (is_front_page() || is_home()){
+        $template = NAROU_DIR . '/templates/home.php';
+    }
 
     return $template;
 }
@@ -88,7 +91,7 @@ add_action( 'wp_enqueue_scripts', 'narou_enqueue_styles' );
  */
 function narou_orderby_modified( $query ) {
 	if( $query->is_main_query() ) {
-        if ($query->is_home()) {
+        if ($query->is_front_page() || $query->is_home()) {
             $query->set('post_type', 'blog');
         }
         // カテゴリ一覧はランダムで表示
