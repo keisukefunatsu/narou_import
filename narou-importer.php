@@ -70,8 +70,27 @@ function get_narou_template($template = '')
 }
 
 add_filter('template_include', 'get_narou_template', 1);
-
+/**
+ * スタイルを読み込む
+ *
+ * @return void
+ */
 function narou_enqueue_styles() {
 	wp_enqueue_style( 'narou_style', NAROU_PATH . '/assets/css/style.css', false, filemtime( NAROU_DIR . '/assets/css/style.css' ) );
 }
 add_action( 'wp_enqueue_scripts', 'narou_enqueue_styles' );
+
+/**
+ * トップは更新日順に並べる
+ *
+ * @param [type] $query
+ * @return void
+ */
+function narou_orderby_modified( $query ) {
+	if( $query->is_main_query() ) {
+        if( $query->is_home() ) {
+			$query->set( 'post_type', 'blog' );
+		}
+	}
+}
+add_action( 'pre_get_posts', 'narou_orderby_modified' );
