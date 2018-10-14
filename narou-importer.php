@@ -60,6 +60,9 @@ function get_narou_template( $template = '' ) {
 	if ( is_post_type_archive( 'blog' ) ) {
 		$template = NAROU_DIR . '/templates/archive-blog.php';
 	}
+	if ( is_page( 'latest' ) ) {
+		$template = NAROU_DIR . '/templates/archive-latest.php';
+	}
 	if ( is_front_page() || is_home() ) {
 		$template = NAROU_DIR . '/templates/home.php';
 	}
@@ -84,15 +87,18 @@ add_action( 'wp_enqueue_scripts', 'narou_enqueue_styles' );
  * @param [type] $query
  * @return void
  */
-function narou_orderby_modified( $query ) {
+function narou_post_order( $query ) {
 	if ( $query->is_main_query() ) {
 		if ( $query->is_front_page() || $query->is_home() ) {
 			$query->set( 'post_type', 'blog' );
 		}
-		// カテゴリ一覧はランダムで表示
-		if ( $query->is_category() || $query->is_tag() ) {
-			$query->set( 'orderby', 'rand' );
+		if ( $query->is_page( 'latest' ) ) {
+			$query->set( 'post_type', 'blog' );
 		}
+		// カテゴリ一覧はランダムで表示
+		// if ( $query->is_category() || $query->is_tag() ) {
+		// $query->set( 'orderby', 'rand' );
+		// }
 	}
 }
-add_action( 'pre_get_posts', 'narou_orderby_modified' );
+add_action( 'pre_get_posts', 'narou_post_order' );

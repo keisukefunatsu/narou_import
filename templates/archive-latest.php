@@ -104,7 +104,7 @@
 	?>
 				<!--/ ぱんくず -->
 				<!--ループ開始-->
-				<h1 class="entry-title">おすすめ小説ブログ一覧 </h1>
+				<h1 class="entry-title">最新の書籍 </h1>
 				<?php get_template_part( 'itiran' ); // 投稿一覧読み込み ?>
 				<?php get_template_part( 'st-pagenavi' ); // ページナビ読み込み ?>
 			</article>

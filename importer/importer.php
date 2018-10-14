@@ -53,9 +53,23 @@ class NarouImporter
     }
     public function import_all()
     {
-        $file = file_get_contents(NAROU_DIR . '/test/test_info.yml');
-        
+        if ( ! is_uploaded_file( $_FILES['book_list']['tmp_name'] ) ) {
+			pp( 'ファイルを選択してください。' );
+			return;
+		}
+		if ( pathinfo( $_FILES['book_list']['name'], PATHINFO_EXTENSION ) != 'yml' ) {
+			pp( 'ファイル形式が異なっています。' );
+			return;
+		}
+		$file = file_get_contents( $_FILES['book_list']['tmp_name'] );
         $array = Spyc::YAMLLoad($file);
+        // pp($array);
+		if ( ! $array[0][':title'] || ! $array[0][':author'] ) {
+			pp( 'ファイルが壊れているか、正しいものではありません。' );
+			return;
+		}
+        
+        
         // pp($array);
         foreach ($array as $arr) {
             // pp($arr[':title']);
